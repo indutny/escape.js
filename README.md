@@ -1,6 +1,6 @@
 # Escape.js
 
-_(Experiment; Work in Progress)_
+_(Experiment; Work in Progress; Any kind of feedback is welcome!)_
 
 Using escape analysis to enforce statically known heap value lifetime.
 
