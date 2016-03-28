@@ -123,7 +123,7 @@ function ex4() {
   // `x`, `y`, `value` escape
   escape(y);
 
-  // This will throw, because `value` escaped
+  // This will throw during compilation, because `value` escaped
   log(x);
 
   // `value` is **not** deallocated here
