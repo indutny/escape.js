@@ -27,9 +27,11 @@ was added to allow running this code in regular JS engines).
 * `escaping.prop = value` - assuming `escaping` object escapes
 * `escape(obj)` - assuming either of these two conditions:
   * the first argument of `escape` escapes it's  __closure__
-  * the function signature is statically unknown (TODO(indutny): enforce this?)
+  * the function signature is statically unknown (see method arguments)
 * `value` is used in escaping closure (escaping statement is the `value`
   declaration)
+* `value` is an argument of function which is stored as the object property
+  (be it class method, or just a function property)
 
 If value does not escape - it is deallocated at the end of the scope where it
 was declared. When value is deallocated - all its sub-values are deallocated too
@@ -150,6 +152,42 @@ function ex5() {
   closure();
 
   // `value` is **not** deallocated here
+}
+```
+
+```js
+function ex6() {
+  class A {
+    method(arg) {
+      // `arg` does not escape expliticly, but still considered escaping
+      // because it is an argument of class' method
+
+      // Thus: `arg` is deallocated here
+    }
+  }
+
+  class B {
+    method(arg) {
+      // Here `arg` clearly escapes
+      escape(arg);
+
+      // `args` is **not** deallocated here
+    }
+  }
+
+  let arr = [ new A(), new B() ];
+
+  arr.forEach((elem) => {
+    let value = 'string';
+
+    // Here `value` escapes unconditionally
+    elem.method(value);
+
+    // `value` is **not** deallocated here
+  });
+
+  // NOTE: arrow function argument of `forEach` escapes too, so it is assumed
+  // that `Array.prototype.forEach` will deallocate it
 }
 ```
 
