@@ -34,7 +34,10 @@ was added to allow running this code in regular JS engines).
   (be it class method, or just a function property)
 * `value` escapes if method is called on it (`value.method()`). Chaining is a
   a natural way to return `value` back to caller. (See `ex7` below).
-  (XXX(indutny): this is required for soundness, but is very unwieldy)
+  (XXX(indutny): this is required for soundness, but is very unwieldy).
+* `this` escapes at the end of the function. Use chaining if invoking several
+  methods within class method is required.
+  (XXX(indutny): unwieldy too).
 
 If value does not escape - it is deallocated at the end of the scope where it
 was declared. When value is deallocated - all its sub-values are deallocated too
