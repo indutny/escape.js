@@ -25,6 +25,8 @@ was added to allow running this code in regular JS engines).
 * `outerVar = value` - assuming `outerVar` is in outer scope
 * `outerVar.prop = value` - assuming `outerVar` is in outer scope
 * `escaping.prop = value` - assuming `escaping` object escapes
+* `value.prop` escapes, `value` escapes (though, partial deallocation will be
+  performed at the end of the scope)
 * `escape(obj)` - assuming either of these two conditions:
   * the first argument of `escape` escapes it's  __closure__
   * the function signature is statically unknown (see method arguments)
