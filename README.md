@@ -32,6 +32,9 @@ was added to allow running this code in regular JS engines).
   declaration)
 * `value` is an argument of function which is stored as the object property
   (be it class method, or just a function property)
+* `value` escapes if method is called on it (`value.method()`). Chaining is a
+  a natural way to return `value` back to caller. (See `ex7` below).
+  (XXX(indutny): this is required for soundness, but is very unwieldy)
 
 If value does not escape - it is deallocated at the end of the scope where it
 was declared. When value is deallocated - all its sub-values are deallocated too
@@ -188,6 +191,29 @@ function ex6() {
 
   // NOTE: arrow function argument of `forEach` escapes too, so it is assumed
   // that `Array.prototype.forEach` will deallocate it
+}
+```
+
+```js
+function ex7() {
+  class A {
+    method() {
+      return this;
+    }
+  }
+
+  let value = new A();
+
+  // `value` escapes on `value.method()` call, but is returned back by the
+  // method itself.
+  value = value.method();
+
+  let tmp = value.method();
+
+  // This will throw during compilation, `value` escaped on the previous line
+  value.method();
+
+  // `tmp` is deallocated here
 }
 ```
 
